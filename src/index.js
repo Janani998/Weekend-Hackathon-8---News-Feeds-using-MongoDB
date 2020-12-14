@@ -13,10 +13,10 @@ const { newsArticleModel } = require("./connector");
 app.get("/newFeeds", (req, res) => {
   let limit = parseInt(req.query.limit);
   let offset = parseInt(req.query.offset);
-  if (!limit || limit < 1 || limit > newsArticleModel.countDocuments()) {
+  if (!limit || limit < 1) {
     limit = onePageArticleCount;
   }
-  if (!offset || offset < 1 || offset > newsArticleModel.countDocuments()) {
+  if (!offset || offset < 1) {
     offset = 1;
   }
   const options = {};
