@@ -11,20 +11,24 @@ app.use(express.json());
 const { newsArticleModel } = require("./connector");
 
 app.get("/newFeeds", (req, res) => {
-  const { limit, offset } = req.query;
-  const query = {};
-  const options = {
-    limit: parseInt(limit, 10) || 10,
-    offset: parseInt(offset, 10) || 0
-  };
-  query.skip = options.limit * (options.offset - 1);
-  query.limit = options.limit;
+  let limit = parseInt(req.query.limit);
+  let offset = parseInt(req.query.offset);
+  if (!limit) {
+    limit = onePageArticleCount;
+  }
+  if (!offset) {
+    offset = 0;
+  }
+
+  const options = {};
+  options.skip = limit * (offset - 1);
+  options.limit = limit;
   newsArticleModel.count({}, function (err) {
     if (err) {
       res.status(500).send({ message: err.message });
       return;
     }
-    newsArticleModel.find({}, {}, query, function (err, result) {
+    newsArticleModel.find({}, {}, options, function (err, result) {
       if (err) {
         res.status(500).send({ message: err.message });
         return;
