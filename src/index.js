@@ -11,7 +11,7 @@ app.use(express.json());
 const { newsArticleModel } = require("./connector");
 
 app.get("/newFeeds", paginatedResults(newsArticleModel), (req, res) => {
-  res.send(res.paginatedElements);
+  res.status(200).send(res.paginatedElements);
 });
 
 function paginatedResults(model) {
