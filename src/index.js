@@ -16,11 +16,11 @@ app.get("/newFeeds", (req, res) => {
   if (!limit || limit < 1) {
     limit = onePageArticleCount;
   }
-  if (!offset || offset < 1) {
-    offset = 1;
+  if (!offset || offset < 0) {
+    offset = 0;
   }
   const options = {};
-  options.skip = limit * (offset - 1);
+  options.skip = limit * offset;
   options.limit = limit;
   newsArticleModel.count({}, function (err) {
     if (err) {
