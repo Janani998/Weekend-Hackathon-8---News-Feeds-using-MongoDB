@@ -20,7 +20,7 @@ app.get("/newFeeds", (req, res) => {
     offset = 0;
   }
   const options = {};
-  options.skip = limit * offset;
+  options.skip = offset - 1;
   options.limit = limit;
   newsArticleModel.count({}, function (err) {
     if (err) {
