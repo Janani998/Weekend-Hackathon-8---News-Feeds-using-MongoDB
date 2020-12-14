@@ -11,17 +11,20 @@ app.use(express.json());
 const { newsArticleModel } = require("./connector");
 
 app.get("/newFeeds", (req, res) => {
-  const limit = parseInt(req.query.limit);
-  const offset = parseInt(req.query.offset);
-  const options = {};
-  options.skip = limit * (offset - 1);
-  options.limit = limit;
-  newsArticleModel.count({}, function (err, totalCount) {
+  const { limit, offset } = req.query;
+  const query = {};
+  const options = {
+    limit: parseInt(limit, 10) || 10,
+    offset: parseInt(offset, 10) || 0
+  };
+  query.skip = options.limit * (options.offset - 1);
+  query.limit = options.limit;
+  newsArticleModel.count({}, function (err) {
     if (err) {
       res.status(500).send({ message: err.message });
       return;
     }
-    newsArticleModel.find({}, {}, options, function (err, result) {
+    newsArticleModel.find({}, {}, query, function (err, result) {
       if (err) {
         res.status(500).send({ message: err.message });
         return;
@@ -31,6 +34,7 @@ app.get("/newFeeds", (req, res) => {
     });
   });
 });
+
 app.listen(port, () => console.log(`App listening on port ${port}!`));
 
 module.exports = app;
