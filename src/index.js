@@ -22,7 +22,7 @@ app.get("/newFeeds", (req, res) => {
   const options = {};
   options.skip = offset - 1;
   options.limit = limit;
-  newsArticleModel.count({}, function (err) {
+  newsArticleModel.countDocuments({}, function (err) {
     if (err) {
       res.status(500).send({ message: err.message });
       return;
