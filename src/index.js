@@ -11,12 +11,18 @@ app.use(express.json());
 const { newsArticleModel } = require("./connector");
 
 app.get("/newFeeds", (req, res) => {
-  const limit = parseInt(req.query.limit);
-  const offset = parseInt(req.query.offset);
+  let limit = parseInt(req.query.limit);
+  let offset = parseInt(req.query.offset);
+  if (!limit) {
+    limit = onePageArticleCount;
+  }
+  if (!offset || offset < 1) {
+    offset = 1;
+  }
   const options = {};
   options.skip = limit * (offset - 1);
   options.limit = limit;
-  newsArticleModel.count({}, function (err, totalCount) {
+  newsArticleModel.count({}, function (err) {
     if (err) {
       res.status(500).send({ message: err.message });
       return;
