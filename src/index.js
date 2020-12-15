@@ -31,18 +31,23 @@ app.get("/newFeeds", (req, res) => {
     }
   }
 
-  newsArticleModel
-    .find()
-    .then((result) => {
-      let startIndex = 0;
-      startIndex += offset;
-      let returnedArray = [];
-      for (let i = startIndex; i < startIndex + limit; i++) {
-        returnedArray.push(result[i]);
+  const options = {};
+  options.skip = offset;
+  options.limit = limit;
+  newsArticleModel.countDocuments({}, function (err) {
+    if (err) {
+      res.status(500).send({ message: err.message });
+      return;
+    }
+    newsArticleModel.find({}, {}, options, function (err, result) {
+      if (err) {
+        res.status(500).send({ message: err.message });
+        return;
+      } else {
+        res.status(200).send(result);
       }
-      res.status(200).send(returnedArray);
-    })
-    .catch((error) => error.message);
+    });
+  });
 });
 app.listen(port, () => console.log(`App listening on port ${port}!`));
 
