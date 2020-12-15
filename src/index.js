@@ -29,6 +29,7 @@ app.get("/newFeeds", (req, res) => {
     if(!offsetReceived){
       offset = 0;
     }
+  }
 
     newsArticleModel.find().then(result =>{
       let startIndex =0;
