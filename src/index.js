@@ -3,7 +3,6 @@ const app = express();
 const port = 8080;
 
 const onePageArticleCount = 10;
-const defaultOffset = 0;
 
 // Parse JSON bodies (as sent by API clients)
 app.use(express.urlencoded({ extended: false }));
@@ -14,21 +13,21 @@ const { newsArticleModel } = require("./connector");
 app.get("/newFeeds", (req, res) => {
   let limitReceived = req.query.limit;
   let offsetReceived = req.query.offset;
-  let limit = parseInt(limitReceived, 10);
-  let offset = parseInt(offsetReceived, 10);
+  let limit = parseInt(Number(limitReceived));
+  let offset = parseInt(Number(offsetReceived));
   if (!limitReceived) {
     limit = onePageArticleCount;
   }
   if (!offsetReceived) {
-    offset = defaultOffset;
+    offset = 0;
   }
   if (isNaN(offset)) {
-    offset = defaultOffset;
+    offset = 0;
   }
   if (isNaN(limit) || limit < 0) {
     limit = onePageArticleCount;
     if (!offsetReceived) {
-      offset = defaultOffset;
+      offset = 0;
     }
   }
 
