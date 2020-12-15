@@ -13,8 +13,8 @@ const { newsArticleModel } = require("./connector");
 app.get("/newFeeds", (req, res) => {
   let limitReceived = req.query.limit;
   let offsetReceived = req.query.offset;
-  let limit = parseInt(limitReceived, 10);
-  let offset = parseInt(offsetReceived, 10);
+  let limit = parseInt(limitReceived);
+  let offset = parseInt(offsetReceived);
   if (!limitReceived) {
     limit = onePageArticleCount;
   }
